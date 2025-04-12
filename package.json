@@ -1,0 +1,39 @@
+{
+  "name": "frugaltv",
+  "version": "1.0.0",
+  "description": "Entertainment! Always",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "tv"
+  ],
+  "author": "sadatrafsanjani",
+  "license": "ISC",
+  "build": {
+    "appId": "com.frugal.tv",
+    "dmg": {
+      "title": "${productName} ${version}",
+      "icon": "build/icon.icns"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "portable": {
+      "artifactName": "FrugalTV.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^35.1.5",
+    "electron-reloader": "^1.2.3"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.5",
+    "electron-builder": "^26.0.12"
+  }
+}

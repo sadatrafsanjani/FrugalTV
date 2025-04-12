@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>FrugalTV</title>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http: https:; media-src 'self' blob: http: https:; script-src 'self'; worker-src blob:;" />
+        <link rel="stylesheet" href="asset/css/style.css"/>
+    </head>
+    <body class="bg-light">
+        <div id="wrapper">
+            <div class="container">
+                <div class="row">
+                    <h1 class="text-success text-center">FrugalTV</h1>
+                    <h3 id="channelName"></h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search channels..." />
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-10 col-lg-8">
+                        <video id="video" class="w-100 rounded shadow mb-3" controls></video>
+                        <h5 id="nowPlaying" class="text-secondary text-center mb-4 fst-italic"></h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="channelList" class="row g-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="asset/js/hls.js"></script>
+    <script src="asset/js/channels.js"></script>
+</html>
