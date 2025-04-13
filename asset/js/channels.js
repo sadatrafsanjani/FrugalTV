@@ -1,8 +1,10 @@
-
 /*
-* Welcome screen shows list of channels
+* List of channels
 * */
+
 let playlistUrl = 'asset/playlist/';
+let allChannels = [];
+let currentActiveCard = null;
 
 window.api.onChannelNameReceive((channelName) => {
 
@@ -10,33 +12,47 @@ window.api.onChannelNameReceive((channelName) => {
     channelName = channelName.charAt(0).toUpperCase() + channelName.slice(1).replace('.m3u', '');
     document.getElementById('channelName').textContent = `${channelName}`;
 
-    fetchM3UPlaylist(playlistUrl).then(channels => {
-        allChannels = channels;
-        displayChannels(channels);
-        setupSearch();
-    }).catch(err => console.error(err));
+    loadChannels(playlistUrl).catch(err => console.error(err));
 });
+
+async function loadChannels(playlistUrl) {
+
+    const m3uData = await fetchM3UPlaylist(playlistUrl);
+    const channels = parseM3U(m3uData);
+
+    allChannels = channels;
+
+    displayChannels(allChannels);
+    setupSearch();
+}
 
 
 const video = document.getElementById('video');
 const channelListEl = document.getElementById('channelList');
 
 async function fetchM3UPlaylist(url) {
+
     const res = await fetch(url);
+
     if (!res.ok) throw new Error('Failed to fetch playlist');
-    const text = await res.text();
-    return parseM3U(text);
+
+    return await res.text();
 }
 
 function parseM3U(m3uText) {
+
     const lines = m3uText.split('\n');
     const channels = [];
 
     for (let i = 0; i < lines.length; i++) {
+
         if (lines[i].startsWith('#EXTINF')) {
+
             const name = lines[i].split(',')[1]?.trim();
             const url = lines[i + 1]?.trim();
+
             if (name && url && url.startsWith('http')) {
+
                 channels.push({ name, url });
             }
         }
@@ -46,69 +62,68 @@ function parseM3U(m3uText) {
 }
 
 
-let currentActiveCard = null;
-
 function displayChannels(channels) {
 
     channelListEl.innerHTML = '';
 
-    channels.forEach(channel => {
+    const row = document.createElement('div');
+    row.className = 'row g-4';
+    channelListEl.appendChild(row);
+
+    channels.forEach((channel, index) => {
 
         const col = document.createElement('div');
-        col.className = 'col-6 col-md-4 col-lg-2';
+        col.className = 'col-12 col-sm-6 col-md-3';
 
         const card = document.createElement('div');
-        card.className = 'channel-card bg-primary text-white text-center p-3 rounded shadow-sm h-100';
+        card.className = 'card bg-primary text-white text-center h-100';
         card.style.cursor = 'pointer';
-        card.textContent = channel.name;
+
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body d-flex align-items-center justify-content-center';
+        cardBody.textContent = channel.name;
+
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        row.appendChild(col);
 
         card.addEventListener('click', () => {
-            playChannel(channel.url);
+
+            playChannel(channel.url, channel.name);
 
             if (currentActiveCard) {
-                currentActiveCard.classList.remove('channel-active');
+                currentActiveCard.classList.remove('border-warning', 'border', 'border-3');
             }
-            card.classList.add('channel-active');
+
+            card.classList.add('border', 'border-3', 'border-warning');
             currentActiveCard = card;
         });
-
-        col.appendChild(card);
-        channelListEl.appendChild(col);
     });
 }
 
-function playChannel(url) {
+function playChannel(url, channel) {
 
     if (Hls.isSupported()) {
+
         const hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    }
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = url;
     }
 
     video.play();
 
     const nowPlayingEl = document.getElementById('nowPlaying');
-    nowPlayingEl.textContent = `Channel: ${getChannelNameFromUrl(url)}`;
+    nowPlayingEl.textContent = `Channel: ${channel}`;
 }
-
-function getChannelNameFromUrl(url) {
-    try {
-        const parts = url.split('/');
-        const name = parts[parts.length - 1].split('.')[0];
-        return name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    } catch {
-        return 'Channel';
-    }
-}
-
-
-let allChannels = [];
 
 function setupSearch() {
+
     const searchInput = document.getElementById('searchInput');
+
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
         const filtered = allChannels.filter(ch => ch.name.toLowerCase().includes(query));

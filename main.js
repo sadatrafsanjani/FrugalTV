@@ -1,6 +1,7 @@
 const { BrowserWindow, app, ipcMain } = require('electron/main')
 const path = require('node:path')
 const fs = require('fs');
+const { session } = require('electron');
 require('electron-reloader')(module);
 
 /* =================== VARIABLES =================== */
@@ -37,6 +38,13 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
 
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+
+        details.requestHeaders['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)';
+        details.requestHeaders['Referer'] = 'https://www.google.com/';
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
+
     createWindow();
 
     app.on('activate', () => {
@@ -44,6 +52,7 @@ app.whenReady().then(() => {
             createWindow()
         }
     })
+
 })
 
 app.on('window-all-closed', () => {
@@ -58,7 +67,7 @@ ipcMain.handle('getPlaylist', async (event, folderPath) => {
         return fs.readdirSync(folderPath);
     }
     catch (err) {
-        console.error('Error reading directory:', err);
+        console.error('Error loading playlist:', err);
     }
 
     return [];
