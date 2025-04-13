@@ -93,7 +93,7 @@ ipcMain.on('openChannelWindow', (event, channelName) => {
         channelWindow.webContents.send('channelName', channelName);
     });
 
-    channelWindow.webContents.openDevTools();
+    //channelWindow.webContents.openDevTools();
     channelWindow.removeMenu();
     channelWindows.set(channelName, channelWindow);
 
