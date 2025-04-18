@@ -61,19 +61,33 @@ app.on('window-all-closed', () => {
     }
 })
 
-ipcMain.handle('getPlaylist', async (event, folderPath) => {
+ipcMain.handle('getCategories', async (event, folderPath) => {
 
     try {
         return fs.readdirSync(folderPath);
     }
     catch (err) {
-        console.error('Error loading playlist:', err);
+        console.error('Error loading categories:', err);
     }
 
     return [];
 });
 
-ipcMain.on('openChannelWindow', (event, channelName) => {
+ipcMain.handle('getCountries', async (event, folderPath) => {
+
+    try {
+        return fs.readdirSync(folderPath);
+    }
+    catch (err) {
+        console.error('Error loading countries:', err);
+    }
+
+    return [];
+});
+
+ipcMain.on('channel-data', (event, channelName, folder) => {
+
+    console.log('Folder', folder);
 
     if (channelWindows.has(channelName)) {
 
@@ -102,7 +116,7 @@ ipcMain.on('openChannelWindow', (event, channelName) => {
         channelWindow.webContents.send('channelName', channelName);
     });
 
-    //channelWindow.webContents.openDevTools();
+    channelWindow.webContents.openDevTools();
     channelWindow.removeMenu();
     channelWindows.set(channelName, channelWindow);
 

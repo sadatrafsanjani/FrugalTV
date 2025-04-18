@@ -2,8 +2,9 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
 
-    getPlaylist: (folderPath) => ipcRenderer.invoke('getPlaylist', folderPath),
-    openChannelWindow: (channelName) => ipcRenderer.send('openChannelWindow', channelName),
+    getCategories: (folderPath) => ipcRenderer.invoke('getCategories', folderPath),
+    getCountries: (folderPath) => ipcRenderer.invoke('getCountries', folderPath),
+    sendChannelData: (channelName, folder) => ipcRenderer.send('channel-data', channelName, folder),
     onChannelNameReceive: (callback) => ipcRenderer.on('channelName', (event, channelName) => callback(channelName))
 });
 

@@ -14,18 +14,21 @@
   "license": "ISC",
   "build": {
     "appId": "com.frugal.tv",
-    "dmg": {
-      "title": "${productName} ${version}",
-      "icon": "build/icon.icns"
+    "productName": "FrugalTV",
+    "directories": {
+      "output": "dist"
     },
     "win": {
-      "target": [
-        "portable"
-      ],
-      "icon": "build/icon.ico"
+      "target": "nsis",
+      "icon": "asset/icons/icon.ico"
     },
-    "portable": {
-      "artifactName": "FrugalTV.exe"
+    "mac": {
+      "target": "dmg",
+      "icon": "asset/icons/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "asset/icons/icon.png"
     }
   },
   "devDependencies": {

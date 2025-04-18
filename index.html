@@ -11,11 +11,30 @@
             <div class="container">
                 <div class="row">
                     <h1 class="text-success text-center">FrugalTV</h1>
-                    <h4 class="text-primary">Categories</h4>
-                    <div id="channels" class="row g-3"></div>
+                </div>
+                <div class="row">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-category-tab" data-bs-toggle="tab" data-bs-target="#nav-category" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Category</button>
+                            <button class="nav-link" id="nav-country-tab" data-bs-toggle="tab" data-bs-target="#nav-country" type="button" role="tab" aria-controls="nav-country" aria-selected="false">Country</button>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-category" role="tabpanel" aria-labelledby="nav-category-tab" tabindex="0">
+                            <div class="row">
+                                <div id="channels" class="row g-3"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-country" role="tabpanel" aria-labelledby="nav-country-tab" tabindex="0">
+                            <div class="row">
+                                <div id="countries" class="row g-3"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </body>
+    <script src="asset/lib/bootstrap.bundle.js"></script>
     <script src="asset/js/renderer.js"></script>
 </html>

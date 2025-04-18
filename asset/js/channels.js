@@ -2,7 +2,7 @@
 * List of channels
 * */
 
-let playlistUrl = 'asset/playlist/';
+let playlistUrl = 'asset/playlist/country/';
 let allChannels = [];
 let currentActiveCard = null;
 
@@ -18,10 +18,7 @@ window.api.onChannelNameReceive((channelName) => {
 async function loadChannels(playlistUrl) {
 
     const m3uData = await fetchM3UPlaylist(playlistUrl);
-    const channels = parseM3U(m3uData);
-
-    allChannels = channels;
-
+    allChannels = parseM3U(m3uData);
     displayChannels(allChannels);
     setupSearch();
 }
